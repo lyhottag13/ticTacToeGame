@@ -20,16 +20,9 @@ public class gameFrame extends JFrame implements ActionListener {
     private JButton confirm = new JButton("Confirm");
     private JLabel warning = new JLabel("");
 
-    // for the board pieces. These will display either X, O, or nothing.
-    private JLabel one = new JLabel("1");
-    private JLabel two = new JLabel("2");
-    private JLabel three = new JLabel("3");
-    private JLabel four = new JLabel("4");
-    private JLabel five = new JLabel("5");
-    private JLabel six = new JLabel("6");
-    private JLabel seven = new JLabel("7");
-    private JLabel eight = new JLabel("8");
-    private JLabel nine = new JLabel("9");
+    // for the board pieces. These will display either X, O, or the position.
+    private JLabel[] boardPieces = new JLabel[9];
+
     Font font = new Font("Cambria", Font.PLAIN, 230);
 
     // other logical variables for game progression.
@@ -47,25 +40,11 @@ public class gameFrame extends JFrame implements ActionListener {
 
         board.setLayout(new GridLayout(3, 3));
 
-        board.add(one);
-        board.add(two);
-        board.add(three);
-        board.add(four);
-        board.add(five);
-        board.add(six);
-        board.add(seven);
-        board.add(eight);
-        board.add(nine);
-
-        one.setFont(font);
-        two.setFont(font);
-        three.setFont(font);
-        four.setFont(font);
-        five.setFont(font);
-        six.setFont(font);
-        seven.setFont(font);
-        eight.setFont(font);
-        nine.setFont(font);
+        for (int i = 0; i < boardPieces.length; i++) {
+            boardPieces[i] = new JLabel(String.valueOf(i + 1));
+            board.add(boardPieces[i]);
+            boardPieces[i].setFont(font);
+        }
 
         prompts.add(where);
         prompts.add(field);
@@ -114,36 +93,7 @@ public class gameFrame extends JFrame implements ActionListener {
 
     // method to set each individual board piece to the desired selection, either X or O.
     public void setBoard(int boardSelection, String swapTo) {
-        switch (boardSelection) {
-            case 1:
-                one.setText(swapTo);
-                break;
-            case 2:
-                two.setText(swapTo);
-                break;
-            case 3:
-                three.setText(swapTo);
-                break;
-            case 4:
-                four.setText(swapTo);
-                break;
-            case 5:
-                five.setText(swapTo);
-                break;
-            case 6:
-                six.setText(swapTo);
-                break;
-            case 7:
-                seven.setText(swapTo);
-                break;
-            case 8:
-                eight.setText(swapTo);
-                break;
-            case 9:
-                nine.setText(swapTo);
-                break;
-            default:
-        }
+        boardPieces[boardSelection - 1].setText(swapTo);
         usedBoardPlaces.add(boardSelection);
     }
 
@@ -159,6 +109,7 @@ public class gameFrame extends JFrame implements ActionListener {
         }
         Random random = new Random();
         int botTurn = 0;
+        // Choose a spot until it selects an unchosen spot.
         do {
             botTurn = random.nextInt(9) + 1;
         } while (usedBoardPlaces.contains(botTurn));
@@ -166,8 +117,8 @@ public class gameFrame extends JFrame implements ActionListener {
     }
 
     public boolean gameEndCheck(String check) {
-        // this statement is long, but it checks all eight winning positions.
-        if (check(one, two, three, check) || check(four, five, six, check) || check(seven, eight, nine, check) || check(one, four, seven, check) || check(two, five, eight, check) || check(three, six, nine, check) || check(one, five, nine, check) || check(three, five, seven, check)) {
+        // This statement is long, but it checks all eight winning positions.
+        if (check(boardPieces[0], boardPieces[1], boardPieces[2], check) || check(boardPieces[3], boardPieces[4], boardPieces[5], check) || check(boardPieces[6], boardPieces[7], boardPieces[8], check) || check(boardPieces[0], boardPieces[3], boardPieces[6], check) || check(boardPieces[1], boardPieces[4], boardPieces[7], check) || check(boardPieces[2], boardPieces[5], boardPieces[8],check) || check(boardPieces[0], boardPieces[4], boardPieces[8], check) || check(boardPieces[2], boardPieces[4], boardPieces[6], check)) {
             prompts.remove(confirm);
             prompts.remove(where);
             prompts.remove(field);
