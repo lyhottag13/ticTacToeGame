@@ -30,7 +30,6 @@ public class gameFrame extends JFrame implements ActionListener {
     ArrayList<Integer> usedBoardPlaces = new ArrayList<>();
     int turn = 0;
     
-
     public gameFrame() {
         frame = new JFrame("Tic-Tac-Toe Game");
         frame.add(background);
